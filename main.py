@@ -20,6 +20,7 @@ app = FastAPI(openapi_tags=tags_metadata)
 origins = [
     "https://beaverhouse.github.io",
     "https://loaprofile.com",
+    "https://beta.loaprofile.com",
     "http://localhost:3000",
     "http://localhost:8080",
 ]
