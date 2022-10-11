@@ -15,7 +15,7 @@ tags_metadata = [
     },
 ]
 
-app = FastAPI()
+app = FastAPI(openapi_tags=tags_metadata)
 
 origins = [
     "https://beaverhouse.github.io",
