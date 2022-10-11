@@ -4,10 +4,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
 
+tags_metadata = [
+    {
+        "name": "V1",
+        "description": "Returns pure HTML String from Lost Ark Page",
+    },
+    {
+        "name": "V2",
+        "description": "Parse specific data from Lost Ark Page",
+    },
+]
+
 app = FastAPI()
 
 origins = [
     "https://beaverhouse.github.io",
+    "https://loaprofile.com"
     "http://localhost:3000",
     "http://localhost:8080",
 ]
@@ -30,13 +42,13 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/html/char/{char_id}")
+@app.get("/v1/char/{char_id}", tags=["V1"])
 def get_html(char_id: str):
     url = 'https://lostark.game.onstove.com/Profile/Character/' + char_id   
     r = requests.get(url)
     return r.text
 
-@app.post("/html/collection")
+@app.post("/v1/collection", tags=["V1"])
 def get_col_html(body: Item):
     data = jsonable_encoder(body)
     url = 'https://lostark.game.onstove.com/Profile/GetCollection'   
