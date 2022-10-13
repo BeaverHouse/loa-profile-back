@@ -3,6 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
+from api.router import v2
 
 tags_metadata = [
     {
@@ -16,6 +17,8 @@ tags_metadata = [
 ]
 
 app = FastAPI(openapi_tags=tags_metadata)
+
+app.include_router(v2.router)
 
 origins = [
     "https://beaverhouse.github.io",
