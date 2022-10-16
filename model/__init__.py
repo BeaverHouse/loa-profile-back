@@ -29,6 +29,7 @@ class JewelInfo(ItemInfo):
 class ClothesInfo(ItemInfo):
     name: str = ""
     quality: int = 0
+    level: int = 0
     set: str = ""
     setLv: int = 1
 
@@ -48,7 +49,7 @@ class SimpleEquipInfo(BaseModel):
     weapon: Optional[ClothesInfo]
     setName: str = ""           # 세트 조합 (ex. 2악4지)
     setLv: str = ""             # 세트 레벨
-    accAvgQuality: int = 0      # 악세 평균 품질
+    accAvgQuality: float = 0      # 악세 평균 품질
     brace: Optional[BraceInfo]
 
 class MainInfo(BaseModel):

@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, HTTPException
 import requests
 from bs4 import BeautifulSoup
-from api.function import parseCard, parseCollect, parseEquip, parseImprint, parseJewel, parseMain, parseStat
+from api.function import parseCard, parseCollect, parseEquip, parseImprint, parseJewel, parseMain, parseSimpleEquip, parseStat, parseSubEquip
 from model import CharInfo
 
 router = APIRouter(
@@ -34,5 +34,8 @@ def get_info(char_id: str):
     info.jewelInfo = parseJewel(j)
     info.card = parseCard(j)
     info.equipInfo = parseEquip(j)
+    info.subEquipInfo = parseSubEquip(j)
+
+    info.simpleEquipInfo = parseSimpleEquip(info.equipInfo, info.subEquipInfo)
 
     return info

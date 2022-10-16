@@ -2,8 +2,9 @@ from typing import List
 from bs4 import BeautifulSoup
 import re
 import requests
+from api.function.constant import EFFECT_BRACE
 
-from model import BaseKeyVal, ClothesInfo, JewelInfo, MainEquipInfo, MainInfo
+from model import AccessoryInfo, BaseKeyVal, BraceInfo, ClothesInfo, JewelInfo, MainEquipInfo, MainInfo, SimpleEquipInfo, SubEquipInfo
 
 
 INT_REGEX = "\D"
@@ -119,12 +120,15 @@ def parseEquip(j) -> MainEquipInfo:
     for idx, e in enumerate(eqs):
         c = ClothesInfo()
         c.name = re.sub(TAG_REGEX, "", e["Element_000"]["value"])
+        c.level = int(re.sub(TAG_REGEX, "", e["Element_001"]["value"]["leftStr2"]).split(" ")[2])
         
         setInfo = list(filter(lambda x: "ItemPartBox" == x["type"], list(e.values())))[2]
         if('동일한' in str(setInfo)):
             c.set, c.setLv = "에스더", 0
         else: 
-            c.set, c.setLv = re.sub(TAG_REGEX, "", setInfo["value"]["Element_001"]).split(" Lv.")
+            set, setLv = re.sub(TAG_REGEX, "", setInfo["value"]["Element_001"]).split(" Lv.")
+            c.set = set
+            c.setLv = int(setLv)
 
         c.quality = e["Element_001"]["value"]["qualityValue"]
         c.src = 'https://cdn-lostark.game.onstove.com/' + e["Element_001"]["value"]["slotData"]["iconPath"]
@@ -136,4 +140,75 @@ def parseEquip(j) -> MainEquipInfo:
             defInfo.append(c)
     
     info.defense = defInfo
+    return info
+
+def parseSubEquip(j) -> SubEquipInfo:
+    info = SubEquipInfo()
+
+    accInfo : List[AccessoryInfo] = []
+    accs = list(filter(lambda x: "무작위 각인" in str(x.get("Element_006")) \
+    and "세공" not in str(x.get("Element_005")), list(j["Equip"].values())))
+    
+    for acc in accs:
+        i = AccessoryInfo()
+        i.name = re.sub(TAG_REGEX, "", acc["Element_000"]["value"])
+        i.quality = acc["Element_001"]["value"]["qualityValue"]
+        i.src = 'https://cdn-lostark.game.onstove.com/' + acc["Element_001"]["value"]["slotData"]["iconPath"]
+        i.color = acc["Element_000"]["value"].split("'")[3]
+        accInfo.append(i)
+
+    info.accessory = accInfo
+
+    brace = BraceInfo()
+    braceData = list(filter(lambda x: "팔찌" in x["Element_000"]["value"], list(j["Equip"].values())))
+    if len(braceData) > 0:
+        b = braceData[0]
+        brace.name = re.sub(TAG_REGEX, "", b["Element_000"]["value"])
+        brace.src = 'https://cdn-lostark.game.onstove.com/' + b["Element_001"]["value"]["slotData"]["iconPath"]
+        brace.color = b["Element_000"]["value"].split("'")[3]
+
+        optInfo = []
+        optionArr = b["Element_004"]["value"]["Element_001"].split("<BR>")
+        for opt in optionArr:
+            parsedOpt = re.sub(TAG_REGEX, "", opt);
+            for eff in EFFECT_BRACE:
+                if "[{}]".format(eff) in parsedOpt:
+                    optInfo.append(eff)
+                    break
+        brace.options = optInfo
+
+    info.brace = brace
+
+    return info
+
+def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
+    info = SimpleEquipInfo()
+    info.weapon = main.weapon
+    info.brace = sub.brace
+    info.defenseCut = min(list(map(lambda x: x.level, main.defense)))
+    
+    dic = {}
+    levelArr = []
+    topLevel = 0
+    for d in main.defense:
+        dic[d.set] = dic.get(d.set, 0) + 1
+        levelArr.append(99 if d.set == "에스더" else d.setLv)
+        if d.setLv > topLevel:
+            topLevel = d.setLv
+
+    d = main.weapon    
+    dic[d.set] = dic.get(d.set, 0) + 1
+    levelArr.append(99 if d.set == "에스더" else d.setLv)
+    if d.setLv > topLevel:
+        topLevel = d.setLv
+    
+    levelArr.sort(reverse=True)
+    info.setName = ""
+    for i in dic.keys():
+        info.setName += " {}{}".format(dic[i], i)
+    info.setName = info.setName.strip()
+    info.setLv = '{}레벨 {}세트'.format(topLevel, levelArr.count(topLevel) + levelArr.count(99))
+
+    info.accAvgQuality = sum(list(map(lambda x: x.quality, sub.accessory))) / 5.0
+
     return info
