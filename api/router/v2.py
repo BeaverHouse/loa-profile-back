@@ -1,7 +1,8 @@
+import json
 from fastapi import APIRouter, HTTPException
 import requests
 from bs4 import BeautifulSoup
-from api.function import parseCollect, parseMain
+from api.function import parseCard, parseCollect, parseEquip, parseImprint, parseJewel, parseMain, parseStat
 from model import CharInfo
 
 router = APIRouter(
@@ -24,5 +25,14 @@ def get_info(char_id: str):
 
     info.mainInfo = parseMain(bsObject)
     info.collectInfo = parseCollect(bsObject)
+    info.statInfo = parseStat(bsObject)
+    info.imprintingInfo = parseImprint(bsObject)
+
+    varScript= list(filter(lambda x: "$.Profile =" in x.text, bsObject.select("script")))
+    j = json.loads(varScript[0].text.replace("$.Profile =", "").replace(";", ""))
+    
+    info.jewelInfo = parseJewel(j)
+    info.card = parseCard(j)
+    info.equipInfo = parseEquip(j)
 
     return info

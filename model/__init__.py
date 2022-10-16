@@ -35,12 +35,12 @@ class ClothesInfo(ItemInfo):
 
 # 메인 장비 (무기, 방어구)
 class MainEquipInfo(BaseModel):
-    defense: List[ClothesInfo]
+    defense: List[ClothesInfo] = []
     weapon: Optional[ClothesInfo]
 
 # 서브 장비 (악세, 팔찌)
 class SubEquipInfo(BaseModel):
-    accessory: List[AccessoryInfo]
+    accessory: List[AccessoryInfo] = []
     brace: Optional[BraceInfo]
 
 class SimpleEquipInfo(BaseModel):
@@ -66,8 +66,8 @@ class CharInfo(BaseModel):
     mainInfo : Optional[MainInfo]
     collectInfo : List[BaseKeyVal] = []     # 수집형 포인트
     statInfo: List[BaseKeyVal] = []          # 전투 특성
-    imprintings: List[BaseKeyVal] = []       # 각인
-    jewelInfo: Optional[List[JewelInfo]]
+    imprintingInfo: List[BaseKeyVal] = []       # 각인
+    jewelInfo: List[JewelInfo] = []
     card: List[str] = []                   # 카드 효과
 
     equipInfo: Optional[MainEquipInfo]
