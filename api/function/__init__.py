@@ -186,6 +186,8 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
     info.weapon = main.weapon
     info.brace = sub.brace
     info.defenseCut = min(list(map(lambda x: x.level, main.defense)))
+    info.defenseSrc = main.defense[1].src
+    info.accSrc = sub.accessory[0].src
     
     dic = {}
     levelArr = []
