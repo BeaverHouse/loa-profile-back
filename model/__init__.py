@@ -47,6 +47,7 @@ class SubEquipInfo(BaseModel):
 class SimpleEquipInfo(BaseModel):
     defenseCut: int = 0         # 방컷
     defenseSrc: str = ""        # 방어구 이미지 (상의)
+    defAvgQuality: float = 0    # 방어구 평균 품질
     weapon: Optional[ClothesInfo]
     setName: str = ""           # 세트 조합 (ex. 2악4지)
     setLv: str = ""             # 세트 레벨

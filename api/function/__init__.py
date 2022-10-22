@@ -212,5 +212,6 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
     info.setLv = '{}레벨 {}세트'.format(topLevel, levelArr.count(topLevel) + levelArr.count(99))
 
     info.accAvgQuality = sum(list(map(lambda x: x.quality, sub.accessory))) / 5.0
+    info.defAvgQuality = sum(list(map(lambda x: x.quality, main.defense))) / 5.0
 
     return info
