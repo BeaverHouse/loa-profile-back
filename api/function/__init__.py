@@ -122,13 +122,17 @@ def parseEquip(j) -> MainEquipInfo:
         c.name = re.sub(TAG_REGEX, "", e["Element_000"]["value"])
         c.level = int(re.sub(TAG_REGEX, "", e["Element_001"]["value"]["leftStr2"]).split(" ")[2])
         
-        setInfo = list(filter(lambda x: "ItemPartBox" == x["type"], list(e.values())))[2]
-        if('동일한' in str(setInfo)):
-            c.set, c.setLv = "에스더", 0
-        else: 
-            set, setLv = re.sub(TAG_REGEX, "", setInfo["value"]["Element_001"]).split(" Lv.")
-            c.set = set
-            c.setLv = int(setLv)
+        itemPartList = list(filter(lambda x: "ItemPartBox" == x["type"], list(e.values())))
+        if len(itemPartList) <= 2:
+            c.set, c.setLv = "일반장비", 0
+        else:
+            setInfo = itemPartList[2]
+            if('동일한' in str(setInfo)):
+                c.set, c.setLv = "에스더", 0
+            else: 
+                set, setLv = re.sub(TAG_REGEX, "", setInfo["value"]["Element_001"]).split(" Lv.")
+                c.set = set
+                c.setLv = int(setLv)
 
         c.quality = e["Element_001"]["value"]["qualityValue"]
         c.src = 'https://cdn-lostark.game.onstove.com/' + e["Element_001"]["value"]["slotData"]["iconPath"]
@@ -209,7 +213,7 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
     for i in dic.keys():
         info.setName += " {}{}".format(dic[i], i)
     info.setName = info.setName.strip()
-    info.setLv = '{}레벨 {}세트'.format(topLevel, levelArr.count(topLevel) + levelArr.count(99))
+    info.setLv = '{}레벨 {}세트'.format(topLevel, levelArr.count(topLevel) + levelArr.count(99)) if topLevel > 0 else "세트 효과 없음"
 
     info.accAvgQuality = sum(list(map(lambda x: x.quality, sub.accessory))) / 5.0
     info.defAvgQuality = sum(list(map(lambda x: x.quality, main.defense))) / 5.0
