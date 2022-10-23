@@ -191,7 +191,7 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
     info.brace = sub.brace
     info.defenseCut = min(list(map(lambda x: x.level, main.defense)))
     info.defenseSrc = main.defense[1].src
-    info.accSrc = sub.accessory[0].src
+    info.accSrc = sub.accessory[0].src if len(sub.accessory) == 5 else "" 
     
     dic = {}
     levelArr = []
@@ -202,7 +202,7 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
         if d.setLv > topLevel:
             topLevel = d.setLv
 
-    d = main.weapon    
+    d = main.weapon
     dic[d.set] = dic.get(d.set, 0) + 1
     levelArr.append(99 if d.set == "에스더" else d.setLv)
     if d.setLv > topLevel:
@@ -216,8 +216,8 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
     info.setLv = '{}레벨 {}세트'.format(topLevel, levelArr.count(topLevel) + levelArr.count(99)) if topLevel > 0 else "세트 효과 없음"
 
     accQList = list(map(lambda x: x.quality, sub.accessory))
-    print(accQList)
-    info.accAvgQuality = (accQList[0]*10 + accQList[1]*3 + accQList[2]*3 + accQList[3]*2+ accQList[4]*2) / 20.0
+    if(len(accQList) == 5):
+        info.accAvgQuality = (accQList[0]*10 + accQList[1]*3 + accQList[2]*3 + accQList[3]*2+ accQList[4]*2) / 20.0
     info.defAvgQuality = sum(list(map(lambda x: x.quality, main.defense))) / 5.0
 
     return info
