@@ -1,3 +1,4 @@
+from optparse import Option
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -77,3 +78,6 @@ class CharInfo(BaseModel):
     equipInfo: Optional[MainEquipInfo]
     subEquipInfo: Optional[SubEquipInfo]
     simpleEquipInfo: Optional[SimpleEquipInfo]
+
+    isSafe: Optional[bool]      # 사건사고 여부
+    reason: Optional[str]       # 사유

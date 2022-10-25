@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, HTTPException
 import requests
 from bs4 import BeautifulSoup
-from api.function import parseCard, parseCollect, parseEquip, parseImprint, parseJewel, parseMain, parseSimpleEquip, parseStat, parseSubEquip
+from api.function import parseCard, parseCollect, parseEquip, parseImprint, parseJewel, parseMain, parseSafe, parseSimpleEquip, parseStat, parseSubEquip
 from model import CharInfo
 
 router = APIRouter(
@@ -37,5 +37,11 @@ def get_info(char_id: str):
     info.subEquipInfo = parseSubEquip(j)
 
     info.simpleEquipInfo = parseSimpleEquip(info.equipInfo, info.subEquipInfo)
+
+    url2 = 'https://arca.live/b/lostark/53703658'
+    
+    r2 = requests.get(url2)
+    arcBsObject = BeautifulSoup(r2.text, "lxml")
+    info.isSafe, info.reason = parseSafe(bsObject, arcBsObject)
 
     return info

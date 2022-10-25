@@ -9,6 +9,7 @@ from model import AccessoryInfo, BaseKeyVal, BraceInfo, ClothesInfo, JewelInfo, 
 
 INT_REGEX = "\D"
 TAG_REGEX = "<[^>]*>"
+SPE_REGEX = r"[^\uAC00-\uD7A30-9a-zA-Z\s]"
 
 def parseMain(bs: BeautifulSoup) -> MainInfo:
     main = MainInfo()
@@ -84,7 +85,7 @@ def parseImprint(bs: BeautifulSoup) -> List[BaseKeyVal]:
 def parseJewel(j) -> List[JewelInfo]:
     info: List[JewelInfo] = []
 
-    jewels = list(filter(lambda x: "보석" in x["Element_000"]["value"], j["Equip"].values()))
+    jewels = list(filter(lambda x: "보석" in x["Element_001"]["value"]["leftStr0"], j["Equip"].values()))
 
     jewels.sort(key=lambda x: -1 if "멸화" in x["Element_000"]["value"] else 1)
 
@@ -174,7 +175,7 @@ def parseSubEquip(j) -> SubEquipInfo:
         optInfo = []
         optionArr = b["Element_004"]["value"]["Element_001"].split("<BR>")
         for opt in optionArr:
-            parsedOpt = re.sub(TAG_REGEX, "", opt);
+            parsedOpt = re.sub(TAG_REGEX, "", opt)
             for eff in EFFECT_BRACE:
                 if "[{}]".format(eff) in parsedOpt:
                     optInfo.append(eff)
@@ -221,3 +222,27 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
     info.defAvgQuality = sum(list(map(lambda x: x.quality, main.defense))) / 5.0
 
     return info
+
+def parseSafe(bs: BeautifulSoup, arcBs: BeautifulSoup):
+    isSafe = True
+    reason = "정상적인 유저입니다."
+
+    targetChars = []
+    charAllContent = bs.select(".profile-character-list__char")
+    for all in charAllContent:
+        for c in all.select("li"):
+            targetChars.append(c.select_one("span").select_one("span").text)
+
+    # 사건사고 조회
+    probCharContent = arcBs.select_one(".article-content").text.split("-")
+    for idx, i in enumerate(probCharContent):
+        if("캐릭터명" in i):
+            probChars = list(map(lambda x: re.sub(SPE_REGEX, "", x), i.split(":")[1].strip().split(" ")))
+            probChars = list(filter(lambda x: len(x)>1, probChars))
+            for t in targetChars:
+                if t in probChars:
+                    isSafe = False
+                    reason = probCharContent[idx+1].replace("`", "").strip()
+                    return isSafe, reason
+
+    return isSafe, reason
