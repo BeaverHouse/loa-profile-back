@@ -242,7 +242,7 @@ def parseSafe(bs: BeautifulSoup, arcBs: BeautifulSoup):
             for t in targetChars:
                 if t in probChars:
                     isSafe = False
-                    reason = probCharContent[idx+1].replace("`", "").strip()
+                    reason = re.sub(r'http\S+', '', probCharContent[idx+1]).replace("`", "").strip()
                     return isSafe, reason
 
     return isSafe, reason
