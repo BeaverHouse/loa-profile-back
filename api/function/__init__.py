@@ -260,9 +260,10 @@ def parseSkill(bs: BeautifulSoup, j) -> SkillInfo:
     for s in skillData:
         skillLv = int(re.sub(INT_REGEX, "", s["Element_003"]["value"]))
         if skillLv >= 4:
+            tripodTarget = list(filter(lambda x: x["type"] == "TripodSkillCustom", s.values()))
             skillNm = s["Element_000"]["value"]
             skillIcon = 'https://cdn-lostark.game.onstove.com/' + s["Element_001"]["value"]["slotData"]["iconPath"]
-            for tripod in list(s["Element_006"]["value"].values()):
+            for tripod in list(tripodTarget[0]["value"].values()):
                 tName = re.sub(TAG_REGEX, "", tripod["name"])
                 if len(tName) > 0:                
                     t = TripodInfo()
