@@ -16,6 +16,7 @@ class TripodInfo(BaseModel):
     name: str = ""
     level: int = 1
     isMax: bool = False
+    src: str = ""
 
 # 악세 정보
 class AccessoryInfo(ItemInfo):
