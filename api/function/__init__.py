@@ -4,7 +4,8 @@ import re
 import requests
 from api.function.constant import EFFECT_BRACE
 
-from model import AccessoryInfo, BaseKeyVal, BraceInfo, ClothesInfo, JewelInfo, MainEquipInfo, MainInfo, SimpleEquipInfo, SubEquipInfo
+from model import AccessoryInfo, BaseKeyVal, BraceInfo, ClothesInfo, \
+    JewelInfo, MainEquipInfo, MainInfo, SimpleEquipInfo, SubEquipInfo, SkillInfo, TripodInfo
 
 
 INT_REGEX = "\D"
@@ -246,3 +247,40 @@ def parseSafe(bs: BeautifulSoup, arcBs: BeautifulSoup):
                     return isSafe, reason
 
     return isSafe, reason
+
+def parseSkill(bs: BeautifulSoup, j) -> SkillInfo:
+    info = SkillInfo()
+    collections = bs.select_one(".profile-skill__point").select("em")
+    info.skillPt = collections[0].text
+    info.maxSkillPt = collections[1].text
+
+    skillData = list(j["Skill"].values())
+    t4,t5,mt = 0,0,0
+    tripodArr = []
+    for s in skillData:
+        skillLv = int(re.sub(INT_REGEX, "", s["Element_003"]["value"]))
+        if skillLv >= 4:
+            skillNm = s["Element_000"]["value"]
+            for tripod in list(s["Element_006"]["value"].values()):
+                tName = re.sub(TAG_REGEX, "", tripod["name"])
+                if len(tName) > 0:                
+                    t = TripodInfo()
+                    t.originSkill = skillNm
+                    t.name = tName
+                    rawLvData = re.sub(TAG_REGEX, "", tripod["tier"])
+                    t.level = int(re.sub(INT_REGEX, "", rawLvData))
+                    t.isMax = "최대" in rawLvData
+                    if t.level == 5:
+                        t5 += 1
+                    elif t.level == 4:
+                        t4 += 1
+                    if not (t.level==1 and t.isMax):
+                        mt += 1    
+                    tripodArr.append(t)
+
+    info.tripodList = tripodArr
+    info.lv4Tripod = t4
+    info.lv5Tripod = t5
+    info.maxTripod = min(18, mt)
+
+    return info

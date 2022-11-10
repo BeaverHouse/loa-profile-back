@@ -10,6 +10,13 @@ class ItemInfo(BaseModel):
     src: str = ""       # 이미지 경로
     color: str = ""     # 이미지 색상
 
+# 개별 트포 정보
+class TripodInfo(BaseModel):
+    originSkill: str = ""
+    name: str = ""
+    level: int = 1
+    isMax: bool = False
+
 # 악세 정보
 class AccessoryInfo(ItemInfo):
     name: str = ""
@@ -67,6 +74,14 @@ class MainInfo(BaseModel):
     itemLv: float = 0
     partyLv: int = 0    # 원대렙
 
+class SkillInfo(BaseModel):
+    skillPt: int = 0
+    maxSkillPt: int = 0
+    lv5Tripod: int = 0
+    lv4Tripod: int = 0
+    maxTripod: int = 0
+    tripodList: List[TripodInfo] = []
+
 class CharInfo(BaseModel):
     mainInfo : Optional[MainInfo]
     collectInfo : List[BaseKeyVal] = []     # 수집형 포인트
@@ -78,6 +93,7 @@ class CharInfo(BaseModel):
     equipInfo: Optional[MainEquipInfo]
     subEquipInfo: Optional[SubEquipInfo]
     simpleEquipInfo: Optional[SimpleEquipInfo]
+    skillInfo: Optional[SkillInfo]
 
     isSafe: Optional[bool]      # 사건사고 여부
     reason: Optional[str]       # 사유

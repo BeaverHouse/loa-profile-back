@@ -2,7 +2,8 @@ import json
 from fastapi import APIRouter, HTTPException
 import requests
 from bs4 import BeautifulSoup
-from api.function import parseCard, parseCollect, parseEquip, parseImprint, parseJewel, parseMain, parseSafe, parseSimpleEquip, parseStat, parseSubEquip
+from api.function import parseCard, parseCollect, parseEquip, parseImprint, parseJewel, \
+    parseMain, parseSafe, parseSimpleEquip, parseStat, parseSubEquip, parseSkill
 from model import CharInfo
 
 router = APIRouter(
@@ -43,5 +44,7 @@ def get_info(char_id: str):
     r2 = requests.get(url2)
     arcBsObject = BeautifulSoup(r2.text, "lxml")
     info.isSafe, info.reason = parseSafe(bsObject, arcBsObject)
+
+    info.skillInfo = parseSkill(bsObject, j)
 
     return info
