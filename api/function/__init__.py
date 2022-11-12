@@ -94,8 +94,11 @@ def parseJewel(j) -> List[JewelInfo]:
         e = JewelInfo()
         e.level = int(a["Element_001"]["value"]["slotData"]["rtString"].replace("Lv.", ""))
         e.src = 'https://cdn-lostark.game.onstove.com/' + a["Element_001"]["value"]["slotData"]["iconPath"]
-        e.desc = re.sub(TAG_REGEX, '', a["Element_004"]["value"]["Element_001"])
         e.name = re.sub(TAG_REGEX, '', a["Element_000"]["value"])
+        if "귀속" in e.name:
+            e.desc = re.sub(TAG_REGEX, '', a["Element_005"]["value"]["Element_001"])
+        else:
+            e.desc = re.sub(TAG_REGEX, '', a["Element_004"]["value"]["Element_001"])
         e.color = a["Element_000"]["value"].split("'")[3]
 
         info.append(e)
