@@ -191,8 +191,8 @@ def parseSimpleEquip(main: MainEquipInfo, sub: SubEquipInfo) -> SimpleEquipInfo:
     info = SimpleEquipInfo()
     info.weapon = main.weapon
     info.brace = sub.brace
-    info.defenseCut = min(list(map(lambda x: x.level, main.defense)))
-    info.defenseSrc = main.defense[1].src
+    info.defenseCut = min(list(map(lambda x: x.level, main.defense))) if len(main.defense) == 5 else 0
+    info.defenseSrc = main.defense[1].src if len(main.defense) == 5 else ""
     info.accSrc = sub.accessory[0].src if len(sub.accessory) == 5 else "" 
     
     dic = {}
