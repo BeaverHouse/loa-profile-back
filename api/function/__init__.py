@@ -111,7 +111,7 @@ def parseJewel(j) -> List[JewelInfo]:
 def parseCard(j) -> List[str]:
     info: List[str] = []
 
-    cards = j["CardSet"].values()
+    cards = j["CardSet"].values() if j["CardSet"] else []
     for c in cards:
         effect = list(c.values())[-1]['title'].replace("각성합계)", "각)")
         info.append(effect)
