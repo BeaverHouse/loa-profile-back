@@ -18,9 +18,7 @@ def get_price_list(codes: list[int]):
         url = 'https://developer-lostark.game.onstove.com/markets/items/{}'.format(code)
         data = requests.get(url, headers=req_headers)
         json = data.json()
-        
-        print(json)
-
+    
         e = {}
         e["code"] = code
         e["name"] = json[0]["Name"]
@@ -43,5 +41,5 @@ def price_save(t: Timer):
     with open("data/guardian_price.json", "w", encoding='utf-8') as f:
         f.write(json.dumps(get_price_list(arr), indent=4, ensure_ascii=False))
     
-    t = Timer(60, price_save, [None])
+    t = Timer(600, price_save, [None])
     t.start()
