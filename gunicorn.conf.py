@@ -11,7 +11,7 @@ def on_starting(server):
             os.makedirs("data")
     except OSError:
         print ('Failed to make directory')
-    timer = Timer(60, price_save, [timer])
+    timer = Timer(60, price_save, [None])
     timer.start()
 
 def on_exit(server):
