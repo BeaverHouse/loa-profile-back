@@ -19,6 +19,8 @@ def get_price_list(codes: list[int]):
         data = requests.get(url, headers=req_headers)
         json = data.json()
         
+        print(json)
+
         e = {}
         e["code"] = code
         e["name"] = json[0]["Name"]
@@ -41,5 +43,5 @@ def price_save(t: Timer):
     with open("data/guardian_price.json", "w", encoding='utf-8') as f:
         f.write(json.dumps(get_price_list(arr), indent=4, ensure_ascii=False))
     
-    t = Timer(60, price_save)
+    t = Timer(60, price_save, [None])
     t.start()
