@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
 from api.router import v2, v3
+from api.function import price_save
+from threading import Timer
 
 tags_metadata = [
     {
@@ -42,10 +44,14 @@ class Item(BaseModel):
   pcId: str
   worldNo: str
 
+@app.on_event("startup")
+async def startup_event():
+    # price_save(None)
+    pass
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
-
 
 @app.get("/v1/char/{char_id}", tags=["V1"])
 def get_html(char_id: str):

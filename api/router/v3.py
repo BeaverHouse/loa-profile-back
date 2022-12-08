@@ -15,9 +15,9 @@ req_headers = {
     "authorization": "bearer " + os.getenv("LOA_API_KEY", "")
 }
 
-@router.get("/test/{char_id}")
-def get_info(char_id: str):
-    url = 'https://developer-lostark.game.onstove.com/armories/characters/{}/profiles'.format(char_id)
-    data = requests.get(url, headers=req_headers)
+@router.get("/guardian/price")
+def get_guardian_price():
+    with open("data/guardian_price.json", "r", encoding='utf-8') as f:
+        data = json.load(f)
     
-    return data.json()
+    return data
