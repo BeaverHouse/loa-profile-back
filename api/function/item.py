@@ -38,8 +38,14 @@ def price_save(t: Timer):
         66102003, 66102004, 66102005, 66102105,
         101171, 101912, 101916, 101042, 101221
     ]
-    with open("data/guardian_price.json", "w", encoding='utf-8') as f:
-        f.write(json.dumps(get_price_list(arr), indent=4, ensure_ascii=False))
+
+    data = None
+    try:
+        data = get_price_list(arr)
+        with open("data/guardian_price.json", "w", encoding='utf-8') as f:
+            f.write(json.dumps(data, indent=4, ensure_ascii=False))
+    except Exception as e:
+        print(e)
     
-    t = Timer(600, price_save, [None])
+    t = Timer(1200, price_save, [None])
     t.start()
