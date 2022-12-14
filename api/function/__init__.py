@@ -9,6 +9,10 @@ from model import AccessoryInfo, BaseKeyVal, BraceInfo, ClothesInfo, \
 
 from .item import get_price_list, price_save
 
+# ---------------------------
+#           V2 전정실 로직
+# ---------------------------
+
 INT_REGEX = "\D"
 TAG_REGEX = "<[^>]*>"
 SPE_REGEX = r"[^\uAC00-\uD7A30-9a-zA-Z\s]"
