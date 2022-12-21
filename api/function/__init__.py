@@ -118,6 +118,8 @@ def parseCard(j) -> List[str]:
 
     cards = j["CardSet"].values() if j["CardSet"] else []
     for c in cards:
+        if len(c.values()) <= 1:
+            continue
         effect = list(c.values())[-1]['title'].replace("각성합계)", "각)")
         info.append(effect)
 
