@@ -1,11 +1,9 @@
 import json
-from model import CharInfo
+from model.character import CharInfo
 from fastapi import APIRouter, HTTPException
 import requests
 from bs4 import BeautifulSoup
-from api.function import parseCard, parseEquip, parseImprint, parseJewel, \
-    parseMain, parseSafe, parseSimpleEquip, parseStat, parseSubEquip, parseSkill
-from api.function.v3char import v3parseCollect
+from api.function.v3char import *
 
 router = APIRouter(
     prefix="/v3", tags=["V3"]
@@ -27,31 +25,20 @@ def get_info(char_id: str):
     
     jobElement = bsObject.select_one('.profile-character-info__img')
     if(not jobElement):
-        raise HTTPException(status_code=404, detail="해당하는 캐릭터가 없습니다.")
-    
-    info = CharInfo()
-
-    info.mainInfo = parseMain(bsObject)
-    info.collectInfo = v3parseCollect(char_id)
-    info.statInfo = parseStat(bsObject)
-    info.imprintingInfo = parseImprint(bsObject)
+        raise HTTPException(status_code=404)
 
     varScript= list(filter(lambda x: "$.Profile =" in x.text, bsObject.select("script")))
     j = json.loads(varScript[0].text.replace("$.Profile =", "").replace(";", ""))
     
-    info.jewelInfo = parseJewel(j)
-    info.card = parseCard(j)
-    info.equipInfo = parseEquip(j)
-    info.subEquipInfo = parseSubEquip(j)
-
-    info.simpleEquipInfo = parseSimpleEquip(info.equipInfo, info.subEquipInfo)
-
-    url2 = 'https://arca.live/b/lostark/53703658'
+    info = CharInfo()
     
-    r2 = requests.get(url2)
-    arcBsObject = BeautifulSoup(r2.text, "lxml")
-    info.isSafe, info.reason = parseSafe(bsObject, arcBsObject)
+    info.basicInfo = parseBasic(bsObject)
+    info.collectInfo = parseCollect(char_id)
+    info.equipInfo = parseEquip(j)
+    info.subEquipInfo = parseSubEquip(j, bsObject)
 
-    info.skillInfo = parseSkill(bsObject, j)
+    info.jewelInfo = parseJewel(j)
+    info.tripodInfo = parseTripod(j)
+    info.cardInfo = parseCard(j)
 
     return info
