@@ -2,6 +2,13 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 """
+Firebase Unit
+"""
+class BlockUser(BaseModel):
+    name: str = ""
+    link: str = ""
+
+"""
 Base Unit
 """
 class BaseKeyVal(BaseModel):

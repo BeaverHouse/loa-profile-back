@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.router import v3
 from api.function import price_save
 from threading import Timer
+import firebase_admin
+from firebase_admin import credentials
 
 tags_metadata = [
     {
@@ -11,6 +13,10 @@ tags_metadata = [
         "description": "V3 API Renewal",
     }
 ]
+
+# init Firebase
+cred = credentials.Certificate("fb.json")
+firebase_admin.initialize_app(cred)
 
 app = FastAPI(openapi_tags=tags_metadata)
 
