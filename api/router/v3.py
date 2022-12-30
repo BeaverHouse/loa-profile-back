@@ -117,6 +117,7 @@ def get_info(char_id: str):
     info.subEquipInfo = parseSubEquip(j, bsObject)
 
     info.jewelInfo = parseJewel(j)
+    info.tripodInfo = parseTripod(j)
     info.cardInfo = parseCard(j)
 
     return info
