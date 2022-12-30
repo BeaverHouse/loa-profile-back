@@ -83,3 +83,40 @@ def get_info(char_id: str):
     info.cardInfo = parseCard(j)
 
     return info
+
+@router.get("/char/{char_id}/electron", response_model=CharInfo)
+def get_info(char_id: str):
+    url = 'https://lostark.game.onstove.com/Profile/Character/' + char_id
+    
+    r = requests.get(url)
+    bsObject = BeautifulSoup(r.text, "lxml")
+    
+    jobElement = bsObject.select_one('.profile-character-info__img')
+    if(not jobElement):
+        raise HTTPException(status_code=404)
+
+    varScript= list(filter(lambda x: "$.Profile =" in x.text, bsObject.select("script")))
+    j = json.loads(varScript[0].text.replace("$.Profile =", "").replace(";", ""))
+    
+    info = CharInfo()
+    
+    info.basicInfo = parseBasic(bsObject)
+
+    url = 'https://developer-lostark.game.onstove.com/characters/{}/siblings'.format(char_id)
+    r = requests.get(url, headers=get_header())
+
+    db = firestore.client()
+    chars = r.json()
+    for c in chars:
+        doc_ref = db.collection("lostark_block").document(c["CharacterName"])
+        if doc_ref.get().exists:
+            info.basicInfo.isSafe = False
+            info.basicInfo.link = doc_ref.get().to_dict()["link"]
+
+    info.equipInfo = parseEquip(j)
+    info.subEquipInfo = parseSubEquip(j, bsObject)
+
+    info.jewelInfo = parseJewel(j)
+    info.cardInfo = parseCard(j)
+
+    return info

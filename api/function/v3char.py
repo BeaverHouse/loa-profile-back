@@ -11,16 +11,23 @@ from api.function.constant import EFFECT_BRACE
 load_dotenv()
     
 def get_header():
-    token = datetime.datetime.now().microsecond % 3
-    if token == 0:
+    token = datetime.datetime.now().microsecond % 5
+    if token <= 1:
         return {
             "authorization": "bearer " + os.getenv("LOA_API_KEY", "")
         }
-    else:
+    elif token == 2:
         return {
             "authorization": "bearer " + os.getenv("LOA_API_KEY_2", "")
         }
-
+    elif token == 3:
+        return {
+            "authorization": "bearer " + os.getenv("LOA_API_KEY_3", "")
+        }
+    else:
+        return {
+            "authorization": "bearer " + os.getenv("LOA_API_KEY_4", "")
+        }
 INT_REGEX = "\D"
 TAG_REGEX = "<[^>]*>"
 SPE_REGEX = r"[^\uAC00-\uD7A30-9a-zA-Z\s]"
