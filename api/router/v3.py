@@ -1,10 +1,14 @@
 import json
 from model.character import CharInfo
 from fastapi import APIRouter, HTTPException
+from dotenv import load_dotenv
 import requests
 from bs4 import BeautifulSoup
 from api.function.v3char import *
 from firebase_admin import firestore
+import base64
+
+load_dotenv()
 
 router = APIRouter(
     prefix="/v3", tags=["V3"]
@@ -20,6 +24,14 @@ def get_guardian_price():
 
 @router.post("/char/block")
 def block(user: BlockUser):
+
+    try:
+        decoded = base64.b64decode(user.key).decode('utf-8')
+    except:        
+        return HTTPException(status_code=400, detail="키 값 오류입니다.")
+
+    if decoded != os.getenv("SECRET_KEY"):
+        return HTTPException(status_code=400, detail="키 값 오류입니다.")
     
     db = firestore.client()
     url = 'https://developer-lostark.game.onstove.com/characters/{}/siblings'.format(user.name)

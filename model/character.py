@@ -7,6 +7,7 @@ Firebase Unit
 class BlockUser(BaseModel):
     name: str = ""
     link: str = ""
+    key: str = ""
 
 """
 Base Unit
