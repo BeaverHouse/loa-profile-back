@@ -6,7 +6,7 @@ import re
 import requests
 from model.character import *
 from bs4 import BeautifulSoup
-from api.function.constant import EFFECT_BRACE
+from api.function.constant import EFFECT_BRACE, EFFECT_SET
 
 load_dotenv()
     
@@ -110,7 +110,8 @@ def parseEquip(j) -> EquipInfo:
     levelArr.sort(reverse=True)
     res.setName = ""
     for i in dic.keys():
-        res.setName += " {}{}".format(dic[i], i)
+        if i in EFFECT_SET:
+            res.setName += " {}{}".format(dic[i], i)
     res.setName = res.setName.strip()
     res.setLv = '{}레벨 {}세트'.format(topLevel, levelArr.count(topLevel) + levelArr.count(99)) if topLevel > 0 else "세트 효과 없음"
 
