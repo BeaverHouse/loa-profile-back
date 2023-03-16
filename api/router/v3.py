@@ -35,7 +35,7 @@ def block(user: BlockUser):
     
     db = firestore.client()
     url = 'https://developer-lostark.game.onstove.com/characters/{}/siblings'.format(user.name)
-    r = requests.get(url, headers=get_header())
+    r = requests.get(url, headers=get_header(), verify=False)
 
     chars = r.json()
     count = 0
@@ -76,7 +76,7 @@ def get_info(char_id: str):
     info.basicInfo = parseBasic(bsObject)
 
     url = 'https://developer-lostark.game.onstove.com/characters/{}/siblings'.format(char_id)
-    r = requests.get(url, headers=get_header())
+    r = requests.get(url, headers=get_header(), verify=False)
 
     db = firestore.client()
     chars = r.json()
@@ -115,7 +115,7 @@ def get_info(char_id: str):
     info.basicInfo = parseBasic(bsObject)
 
     url = 'https://developer-lostark.game.onstove.com/characters/{}/siblings'.format(char_id)
-    r = requests.get(url, headers=get_header())
+    r = requests.get(url, headers=get_header(), verify=False)
 
     db = firestore.client()
     chars = r.json()

@@ -196,7 +196,7 @@ def parseCollect(char_id: str) -> List[BaseKeyVal]:
     res: List[BaseKeyVal] = []
 
     url = 'https://developer-lostark.game.onstove.com/armories/characters/{}/collectibles'.format(char_id) 
-    r = requests.get(url, headers=get_header())
+    r = requests.get(url, headers=get_header(), verify=False)
 
     collections = r.json()
     for c in collections:
