@@ -33,6 +33,6 @@ async def startup_event():
     # price_save(None)
     pass
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def read_root():
     return RedirectResponse("/docs") 

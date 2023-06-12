@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import requests
 from bs4 import BeautifulSoup
 from api.function.v3char import *
-from firebase_admin import firestore
 
 load_dotenv()
 
