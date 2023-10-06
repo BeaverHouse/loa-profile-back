@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Ubuntu OS 기준
+# 제대로 작동하지 않음
 sudo apt update
 sudo apt install python3 -y
 sudo apt install python3-pip -y
