@@ -1,12 +1,12 @@
 import json
 from model.character import CharInfo
 from fastapi import APIRouter, HTTPException
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import requests
 from bs4 import BeautifulSoup
 from api.function.v3char import *
 
-load_dotenv()
+# load_dotenv()
 
 router = APIRouter(
     prefix="/v3", tags=["V3"]

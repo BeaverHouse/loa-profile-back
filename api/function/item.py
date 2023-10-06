@@ -1,12 +1,12 @@
 import os
 import requests
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import datetime
 from typing import List
 from threading import Timer
 import json
 
-load_dotenv()
+# load_dotenv()
 
 req_headers = {
     "authorization": "bearer " + os.getenv("LOA_API_KEY", "")

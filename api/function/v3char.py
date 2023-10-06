@@ -1,4 +1,4 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 import datetime
 from typing import List
@@ -8,7 +8,7 @@ from model.character import *
 from bs4 import BeautifulSoup
 from api.function.constant import EFFECT_BRACE, EFFECT_SET
 
-load_dotenv()
+# load_dotenv()
     
 def get_header():
     token = datetime.datetime.now().microsecond % 5
