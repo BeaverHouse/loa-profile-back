@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from api.router import v3
+from api.function import price_save
+import os
 
 tags_metadata = [
     {
@@ -30,7 +32,12 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    # price_save(None)
+    try:
+        if not os.path.exists("data"):
+            os.makedirs("data")
+    except OSError:
+        print ('Failed to make directory')
+    price_save(None)
     pass
 
 @app.get("/", include_in_schema=False)

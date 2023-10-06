@@ -16,18 +16,11 @@ def get_header():
         return {
             "authorization": "bearer " + os.getenv("LOA_API_KEY", "")
         }
-    elif token == 2:
-        return {
-            "authorization": "bearer " + os.getenv("LOA_API_KEY_2", "")
-        }
-    elif token == 3:
-        return {
-            "authorization": "bearer " + os.getenv("LOA_API_KEY_3", "")
-        }
     else:
         return {
-            "authorization": "bearer " + os.getenv("LOA_API_KEY_4", "")
+            "authorization": "bearer " + os.getenv(f"LOA_API_KEY_{token}", "")
         }
+
 INT_REGEX = "\D"
 TAG_REGEX = "<[^>]*>"
 SPE_REGEX = r"[^\uAC00-\uD7A30-9a-zA-Z\s]"
@@ -41,12 +34,9 @@ def parseBasic(bs: BeautifulSoup) -> BasicInfo:
     res.itemLv = float(bs.select_one(".level-info2__expedition").text
         .replace("장착 아이템 레벨Lv.", "").replace(",", ""))
 
-    # 효수 판별 - 제작 필요
-
     statData = bs.select_one(".profile-ability-basic").select("span")
     res.atk = statData[1].text
     res.hp = statData[3].text
-
 
     res.fightLv = int(re.sub(INT_REGEX, "", bs.select_one(".profile-character-info__lv").text))
     collections = bs.select_one(".profile-skill__point").select("em")

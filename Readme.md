@@ -1,17 +1,14 @@
-# LOA Profile 백엔드
-221208 : OpenAPI 추가작업 진행중   
-프로필 부분은 제한해제 승인 시 반영 예정.
+# LOA Profile B/E
+231006 Code Clean   
+No more Updates
 
-
-로아 공홈 CORS 문제로 인한 우회 서버용 코드
-
-http://api.loaprofile.com/docs
+http://api.loaprofile.com
 
 ## Command
 ```
 # for development
-uvicorn main:app --reload
+uvicorn main:app
 
 # or production
-gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --daemon
+sudo gunicorn main:app --bind 0.0.0.0:80 --workers 4 --worker-class uvicorn.workers.UvicornWorker --daemon
 ```

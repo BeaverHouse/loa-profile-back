@@ -49,4 +49,5 @@ def price_save(t: Timer):
         print(e)
     
     t = Timer(1200, price_save, [None])
+    t.daemon = True
     t.start()
