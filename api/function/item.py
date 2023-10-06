@@ -2,6 +2,7 @@ import os
 import requests
 from dotenv import load_dotenv
 import datetime
+from typing import List
 from threading import Timer
 import json
 
@@ -11,7 +12,7 @@ req_headers = {
     "authorization": "bearer " + os.getenv("LOA_API_KEY", "")
 }
 
-def get_price_list(codes: list[int]):
+def get_price_list(codes: List[int]):
     arr = [] 
 
     for code in codes:
