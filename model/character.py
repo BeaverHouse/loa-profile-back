@@ -46,7 +46,7 @@ class Clothes(ItemInfo):
 # 장비 통합 정보
 class EquipInfo(BaseModel):
     defense: List[Clothes] = []
-    weapon: Optional[Clothes]
+    weapon: Optional[Clothes] = None
     defenseCut: int = 0         # 방컷
     defAvgQuality: float = 0    # 방어구 평균 품질
     setName: str = ""           # 세트 조합 (ex. 2악4지)
@@ -65,7 +65,7 @@ class Brace(ItemInfo):
 # 악세, 팔찌 통합 정보
 class SubEquipInfo(BaseModel):
     accessory: List[Accessory] = []
-    brace: Optional[Brace]
+    brace: Optional[Brace] = None
     accAvgQuality: float = 0    # 악세 평균 품질
     stats: List[BaseKeyVal] = []          # 전투 특성
     imprintings: List[BaseKeyVal] = []       # 각인
@@ -93,10 +93,10 @@ class TripodInfo(BaseModel):
     tripodList: List[Tripod] = []
 
 class CharInfo(BaseModel):
-    basicInfo : Optional[BasicInfo]
+    basicInfo : Optional[BasicInfo] = None
     collectInfo : List[BaseKeyVal] = []
-    equipInfo: Optional[EquipInfo]
-    subEquipInfo: Optional[SubEquipInfo]
+    equipInfo: Optional[EquipInfo] = None
+    subEquipInfo: Optional[SubEquipInfo] = None
     jewelInfo: List[Jewel] = []
-    tripodInfo: Optional[TripodInfo]
+    tripodInfo: Optional[TripodInfo] = None
     cardInfo: List[str] = []                   # 카드 효과
