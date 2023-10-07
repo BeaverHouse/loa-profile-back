@@ -1,7 +1,8 @@
 # LOA Profile B/E
 **231007 Code Fixed**   
 
-&#10060; No more Updates...
+&#10060; No more major Updates...   
+특별한 계기가 없다면, 큰 변경사항 없이 서버만 유지할 계획입니다.
 
 Hosting : [Google Cloud Platform][ref1], e2-micro (10/07 ~ )
 
