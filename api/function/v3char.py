@@ -6,7 +6,7 @@ import re
 import requests
 from model.character import *
 from bs4 import BeautifulSoup
-from api.function.constant import EFFECT_BRACE, EFFECT_SET
+from api.function.constant import EFFECT_BRACE, EFFECT_SET, JOB_BOOKS
 
 # load_dotenv()
     
@@ -121,14 +121,15 @@ def parseStat(bs: BeautifulSoup) -> List[BaseKeyVal]:
     info.sort(key=lambda x: x.value, reverse=True)        
     return info
 
-def parseImprint(bs: BeautifulSoup) -> List[BaseKeyVal]:
-    info: List[BaseKeyVal] = []
+def parseImprint(bs: BeautifulSoup) -> List[ImprintInfo]:
+    info: List[ImprintInfo] = []
 
     collections = bs.select_one(".profile-ability-engrave").select("span")
     for c in collections:
-        e = BaseKeyVal()
+        e = ImprintInfo()
         e.name = c.text.split("Lv.")[0].strip()
         e.value = int(c.text.split("Lv.")[1].strip())
+        e.isJob = e.name in JOB_BOOKS
         info.append(e)
   
     return info

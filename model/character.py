@@ -16,6 +16,10 @@ class ItemInfo(BaseModel):
 """
 Advanced Unit
 """
+# 각인 정보
+class ImprintInfo(BaseKeyVal):
+    isJob: bool = False
+
 # 기본 정보
 class BasicInfo(BaseModel):
     server: str = ""
@@ -68,7 +72,7 @@ class SubEquipInfo(BaseModel):
     brace: Optional[Brace] = None
     accAvgQuality: float = 0    # 악세 평균 품질
     stats: List[BaseKeyVal] = []          # 전투 특성
-    imprintings: List[BaseKeyVal] = []       # 각인
+    imprintings: List[ImprintInfo] = []       # 각인
     imprintSummay: str = ""
 
 # 보석 정보    
