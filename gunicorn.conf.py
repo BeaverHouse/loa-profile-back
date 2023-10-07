@@ -1,7 +1,6 @@
 import os
 import sys
 from api.function import price_save
-from threading import Timer
 
 def on_starting(server):
     try:
