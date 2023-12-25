@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Caution : Not work properly...
+# Caution : It may not work properly...
 
 sudo apt update
 sudo apt install python3 -y
