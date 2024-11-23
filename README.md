@@ -31,7 +31,7 @@
 | ---------- | ---------------------- |
 | 2022-10-08 | Deployed API prototype |
 | 2023-12-07 | Final update           |
-| 2024-11-03 | Archived               |
+| 2024-11-24 | Archived               |
 
 ### Comments
 
